@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+scipy = "*"
+
+[packages.tensorflow-gpu-linux]
+file = "https://files.pythonhosted.org/packages/a1/eb/bc0784af18f612838f90419cf4805c37c20ddb957f5ffe0c42144562dcfa/tensorflow_gpu-2.0.0-cp37-cp37m-manylinux2010_x86_64.whl"
+sys_platform = "=='linux'"
+
+[packages.tensorflow-gpu-win]
+file = "https://files.pythonhosted.org/packages/d5/cf/83a8b5aa711adcdbed5496618663ed99878b28e843593cb6b2fae6a59181/tensorflow_gpu-2.0.0-cp36-cp36m-win_amd64.whl"
+sys_platform = "=='windows'"
+
+[dev-packages]
+
+[requires]
+python_version = "3"
