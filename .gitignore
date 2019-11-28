@@ -3,3 +3,4 @@ shapenet10/data/
 shapenet10/3DShapeNets/
 shapenet10/3DShapeNetsCode.zip
 *.npz
+checkpoints/
