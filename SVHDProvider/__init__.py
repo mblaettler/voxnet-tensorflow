@@ -1,0 +1,81 @@
+import os
+import numpy as np
+import pandas as pd
+
+
+DATA_DIR = "/path/to/data"
+META_DIR = "/path/to/metadata"
+
+MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
+DATA_PATH = os.path.join(MODULE_PATH, "data")
+
+
+labels = {
+    "ArticTruck": 0,
+    "ArticTruckDumptor": 1,
+    "ArticTruckLowLoaded": 2,
+    "ArticTruckTanker": 3,
+    "Bike": 4,
+    "Bus": 5,
+    "CamperVan": 6,
+    "Car": 7,
+    "CarWithTrailer": 8,
+    "Truck": 9,
+    "TruckDumptor": 10,
+    "TruckLowLoaded": 11,
+    "TruckWithTrailer": 12,
+    "Van": 13,
+    "VanPickup": 14,
+    "VanWithTrailer": 15
+}
+
+
+SIZE_X = 16
+SIZE_Y = 20
+SIZE_Z = 88
+
+
+def __get_data(data_info):
+    metadata_cache = {}
+    data = []
+    lbl = []
+
+    with open(data_info, "r") as data_info_file:
+        files = [line.strip() for line in data_info_file]
+
+    for f in files:
+        filepath = os.path.join(MODULE_PATH, f)
+        with open(filepath, "r") as data_file:
+            data_files = [line.strip() for line in data_file]
+
+        for df in data_files:
+            campaign_name, vehicle_name = df.split("/")
+
+            df_path = os.path.join(DATA_DIR, df).replace(".vehicle", ".npy")
+            df_data = np.load(df_path)
+            df_data = df_data.reshape((SIZE_X, SIZE_Y, SIZE_Z, 1))
+
+            metadata_filename = os.path.join(META_DIR, f"{campaign_name}.csv")
+
+            if campaign_name not in metadata_cache:
+                metadata_cache[campaign_name] = pd.read_csv(metadata_filename,
+                                                            sep=",", header=None, index_col="fileName",
+                                                            names=["fileName", "label", "labelId", "shape",
+                                                                   "shapeAttributes(1)", "shapeAttributes(2)"])
+
+            class_lbl = labels[metadata_cache[campaign_name].loc[vehicle_name]["label"]]
+
+            lbl.append(class_lbl)
+            data.append(df_data)
+
+    return data, lbl
+
+
+def get_training_data():
+    train_path = os.path.join(DATA_PATH, "train_files.txt")
+    return __get_data(train_path)
+
+
+def get_test_data():
+    test_path = os.path.join(DATA_PATH, "test_files.txt")
+    return __get_data(test_path)
