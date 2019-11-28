@@ -1,4 +1,4 @@
-import shapenet10
+import shapenet10 as dataset
 from voxnet.model import get_model
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import ModelCheckpoint
@@ -16,7 +16,7 @@ def train():
             data = archive["data"]
             labels = archive["labels"]
     else:
-        data, labels = shapenet10.get_training_data()
+        data, labels = dataset.get_training_data()
         labels = to_categorical(labels)
         np.savez("train_data", data=data, labels=labels)
 
@@ -25,13 +25,13 @@ def train():
             data_test = archive["data"]
             labels_test = archive["labels"]
     else:
-        data_test, labels_test = shapenet10.get_test_data()
+        data_test, labels_test = dataset.get_test_data()
         labels_test = to_categorical(labels_test)
         np.savez("test_data", data=data_test, labels=labels_test)
 
     save_checkpoint = ModelCheckpoint("checkpoints", monitor="val_loss", save_best_only=True)
 
-    model = get_model((shapenet10.SIZE_X, shapenet10.SIZE_Y, shapenet10.SIZE_Z, 1), 40)
+    model = get_model((dataset.SIZE_X, dataset.SIZE_Y, dataset.SIZE_Z, 1), 40)
 
     model.summary()
     model.compile(optimizer='rmsprop',
