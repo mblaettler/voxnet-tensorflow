@@ -3,11 +3,11 @@ import numpy as np
 import pandas as pd
 
 
-DATA_DIR = "G:\\Projects\\MBlaettler_VM1\\SICKDataCleanedASC_Voxelized"
-META_DIR = "G:\\Projects\\MBlaettler_VM1\\SICKMetadata"
+DATA_DIR = "G:\\Projects\\MBlaettler_VM1\\DATA\\SICKDataCleanedASC_Voxelized"
+META_DIR = "G:\\Projects\\MBlaettler_VM1\\DATA\\SICKMetadata"
 
 MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
-DATA_PATH = os.path.join(MODULE_PATH, "data")
+DATA_PATH = os.path.join(MODULE_PATH, "data", "SVHD")
 
 
 labels = {
@@ -21,12 +21,20 @@ labels = {
     "Car": 7,
     "CarWithTrailer": 8,
     "Truck": 9,
-    "TruckDumptor": 10,
-    "TruckLowLoaded": 11,
-    "TruckWithTrailer": 12,
-    "Van": 13,
-    "VanPickup": 14,
-    "VanWithTrailer": 15
+    "TruckCarTransporterLoaded": 10,
+    "TruckDumptor": 11,
+    "TruckLowLoaded": 12,
+    "TruckTanker": 13,
+    "TruckWithTrailer": 14,
+    "Van": 15,
+    "VanDelivery": 16,
+    "VanPickup": 17,
+    "VanPickupWithTrailer": 18,
+    "VanWithTrailer": 19,
+    "Phantom": 20,
+    "ArticVan": 21,
+    "TruckCarTransporterEmpty": 22,
+    "VanDeliveryWithTrailer": 23
 }
 
 
@@ -34,7 +42,12 @@ SIZE_X = 16
 SIZE_Y = 20
 SIZE_Z = 88
 
-NUM_CLASSES = 16
+
+def num_classes(data_type):
+    if data_type == "TIC":
+        return 21
+    else:  # assume FPS
+        return 24
 
 
 def __get_data(data_info):
@@ -73,11 +86,11 @@ def __get_data(data_info):
     return data, lbl
 
 
-def get_training_data():
-    train_path = os.path.join(DATA_PATH, "train_files.txt")
+def get_training_data(data_type):
+    train_path = os.path.join(DATA_PATH, data_type, "train_files.txt")
     return __get_data(train_path)
 
 
-def get_test_data():
-    test_path = os.path.join(DATA_PATH, "test_files.txt")
+def get_test_data(data_type):
+    test_path = os.path.join(DATA_PATH, data_type, "test_files.txt")
     return __get_data(test_path)
