@@ -1,11 +1,11 @@
 import SVHDProvider as dataset
 from voxnet.model import get_model
 from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.callbacks import ModelCheckpoint
-import matplotlib.pyplot as plt
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 import os
 import numpy as np
 
+tensorboard_callback = TensorBoard(log_dir="log")
 
 BATCH_SIZE = 128
 
@@ -48,16 +48,7 @@ def train():
 
     print("Starting training...")
     log = model.fit(data, labels, epochs=50, batch_size=BATCH_SIZE, validation_data=(data_test, labels_test),
-                    verbose=1, callbacks=[save_checkpoint])
-
-    plt.figure(1)
-    plt.plot(log.history['loss'], label='Training')
-    plt.plot(log.history['val_loss'], label='Testing')
-    plt.xlabel('epochs')
-    plt.ylabel('loss')
-    plt.legend()
-    plt.grid()
-    plt.show()
+                    verbose=1, callbacks=[save_checkpoint, tensorboard_callback])
 
 
 if __name__ == "__main__":
