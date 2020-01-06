@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 
-DATA_DIR = "/path/to/data"
-META_DIR = "/path/to/metadata"
+DATA_DIR = "G:\\Projects\\MBlaettler_VM1\\SICKDataCleanedASC_Voxelized"
+META_DIR = "G:\\Projects\\MBlaettler_VM1\\SICKMetadata"
 
 MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
 DATA_PATH = os.path.join(MODULE_PATH, "data")
@@ -33,6 +33,8 @@ labels = {
 SIZE_X = 16
 SIZE_Y = 20
 SIZE_Z = 88
+
+NUM_CLASSES = 16
 
 
 def __get_data(data_info):

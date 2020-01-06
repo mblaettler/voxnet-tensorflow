@@ -1,4 +1,4 @@
-import shapenet10 as dataset
+import SVHDProvider as dataset
 from voxnet.model import get_model
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import ModelCheckpoint
@@ -8,6 +8,12 @@ import numpy as np
 
 
 BATCH_SIZE = 128
+
+
+def shuffle_data(data, lbl):
+    idx = np.arange(len(lbl))
+    np.random.shuffle(idx)
+    return data[idx, ...], lbl[idx]
 
 
 def train():
@@ -29,9 +35,11 @@ def train():
         labels_test = to_categorical(labels_test)
         np.savez("test_data", data=data_test, labels=labels_test)
 
+    data, labels = shuffle_data(data, labels)
+
     save_checkpoint = ModelCheckpoint("checkpoints", monitor="val_loss", save_best_only=True)
 
-    model = get_model((dataset.SIZE_X, dataset.SIZE_Y, dataset.SIZE_Z, 1), 40)
+    model = get_model((dataset.SIZE_X, dataset.SIZE_Y, dataset.SIZE_Z, 1), dataset.NUM_CLASSES)
 
     model.summary()
     model.compile(optimizer='rmsprop',

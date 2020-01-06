@@ -52,6 +52,8 @@ SIZE_X = 30
 SIZE_Y = 30
 SIZE_Z = 30
 
+NUM_CLASSES = 40
+
 
 def __get_data(path):
     data = []
