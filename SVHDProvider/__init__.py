@@ -54,6 +54,7 @@ def __get_data(data_info):
     metadata_cache = {}
     data = []
     lbl = []
+    sample_name = []
 
     with open(data_info, "r") as data_info_file:
         files = [line.strip() for line in data_info_file]
@@ -82,8 +83,9 @@ def __get_data(data_info):
 
             lbl.append(class_lbl)
             data.append(df_data)
+            sample_name.append(df)
 
-    return data, lbl
+    return data, lbl, sample_name
 
 
 def get_training_data(data_type):
