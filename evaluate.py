@@ -30,13 +30,15 @@ def evaluate():
 
     model = load_model(os.path.join("checkpoints", data_type, "model.h5"))
 
+    data_test = np.reshape(data_test,
+                           (data_test.shape[0], dataset.SIZE_X, dataset.SIZE_Y, dataset.SIZE_Z, 1)).astype(np.float32)
+    predicted_lbls = model.predict(data_test)
+
     eval_log = ""
     for i in range(len(sample_names)):
         sample = sample_names[i]
-        data = data_test[i, ...]
-        data = np.reshape(data, (1, dataset.SIZE_X, dataset.SIZE_Y, dataset.SIZE_Z, 1)).astype(np.float32)
         lbl = np.argmax(labels_test[i, ...])
-        predicted = np.argmax(model.predict(data))
+        predicted = np.argmax(predicted_lbls[i, ...])
         eval_log += f"{sample}, {predicted}, {lbl}\n"
 
     if not os.path.isdir("eval"):
